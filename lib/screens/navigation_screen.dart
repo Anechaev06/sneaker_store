@@ -10,7 +10,7 @@ import 'package:sneaker_store/screens/home_screen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class NavigationScreen extends StatefulWidget {
-  const NavigationScreen({Key? key}) : super(key: key);
+  const NavigationScreen({super.key});
 
   @override
   State<NavigationScreen> createState() => _NavigationScreenState();
@@ -40,7 +40,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
       child: Scaffold(
         body: _screens.elementAt(_selectedIndex),
         bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 25),
           child: ClipRRect(
             borderRadius: const BorderRadius.all(Radius.circular(50)),
             child: GNav(

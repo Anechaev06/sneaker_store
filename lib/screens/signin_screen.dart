@@ -5,8 +5,8 @@ import 'package:sneaker_store/screens/forgot_password_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   final VoidCallback showSignUpScreen;
-  const SignInScreen({Key? key, required this.showSignUpScreen})
-      : super(key: key);
+
+  const SignInScreen({super.key, required this.showSignUpScreen});
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -18,15 +18,9 @@ class _SignInScreenState extends State<SignInScreen> {
   final _passwordController = TextEditingController();
 
   Future signIn() async {
-    showDialog(
-      context: context,
-      builder: (context) => const Center(child: CircularProgressIndicator()),
-    );
     await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim());
-
-    Navigator.of(context).pop();
   }
 
   @override
