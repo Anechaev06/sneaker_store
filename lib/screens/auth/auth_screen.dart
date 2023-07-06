@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sneaker_store/screens/signin_screen.dart';
-import 'package:sneaker_store/screens/signup_screen.dart';
+import 'signin_screen.dart';
+import 'signup_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sneaker_store/screens/forgot_password_screen.dart';
+import 'package:sneaker_store/screens/auth/forgot_password_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   final VoidCallback showSignUpScreen;

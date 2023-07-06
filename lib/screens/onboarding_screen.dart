@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sneaker_store/screens/auth_screen.dart';
+import 'package:sneaker_store/screens/auth/auth_screen.dart';
 import 'package:sneaker_store/constants/colors.dart';
 
 class OnBoardingScreen extends StatelessWidget {
