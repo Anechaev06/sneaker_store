@@ -1,8 +1,11 @@
-// sneaker_model.dart
 class Sneaker {
-  final String imageUrl;
-  final String title;
-  final double price;
+  String title;
+  double price;
+  List<String> images;
 
-  Sneaker({required this.imageUrl, required this.title, required this.price});
+  Sneaker({
+    required this.title,
+    required this.price,
+    required this.images,
+  });
 }
