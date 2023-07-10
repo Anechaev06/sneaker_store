@@ -37,15 +37,18 @@ class _SneakerTileState extends State<SneakerTile> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * .3,
-                child: PageView.builder(
-                  itemCount: sneaker.images.length,
-                  itemBuilder: (context, index) => ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Image.asset(
-                      sneaker.images[index],
-                      fit: BoxFit.cover,
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * .3,
+                  child: PageView.builder(
+                    itemCount: sneaker.images.length,
+                    itemBuilder: (context, index) => ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: Image.asset(
+                        sneaker.images[index],
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),

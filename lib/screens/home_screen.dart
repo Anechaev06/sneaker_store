@@ -15,27 +15,35 @@ class _HomeScreenState extends State<HomeScreen> {
   // Assume you have a list of Sneakers here
   final List<Sneaker> sneakers = [
     Sneaker(
-      images: ['assets/images/dunk_low.jpg'],
+      images: [
+        'assets/images/nike/dunk_low_vx1000_1.jpg',
+        'assets/images/nike/dunk_low_vx1000_2.jpeg',
+        'assets/images/nike/dunk_low_vx1000_3.jpeg'
+      ],
       title: 'Nike SB Dunk Low VX1000',
+      price: 299.99,
+    ),
+    Sneaker(
+      images: [
+        'assets/images/nike/dunk_low_gulf_58_1.jpeg',
+        'assets/images/nike/dunk_low_gulf_58_2.jpeg',
+        'assets/images/nike/dunk_low_gulf_58_3.jpeg'
+      ],
+      title: 'Dunk SB Low Club 58 Gulf',
       price: 399.99,
     ),
     Sneaker(
-      images: ['assets/images/club_58_gulf.jpeg'],
-      title: 'Dunk SB Low Club 58 Gulf',
-      price: 499.99,
-    ),
-    Sneaker(
-      images: ['assets/images/nb-White-Green.jpeg'],
+      images: ['assets/images/new_balance/nb-White-Green.jpeg'],
       title: 'New Balance 550 Aime Leon Dore - White Green',
       price: 239.99,
     ),
     Sneaker(
-      images: ['assets/images/adidas_slides.jpeg'],
+      images: ['assets/images/adidas/adidas_slides.jpeg'],
       title: 'Yeezy Slide Glow Green',
       price: 199.99,
     ),
     Sneaker(
-      images: ['assets/images/samba-green.jpeg'],
+      images: ['assets/images/adidas/samba-green.jpeg'],
       title: 'Adidas Samba OG Collegiate Green Gum Grey Toe',
       price: 249.99,
     ),
