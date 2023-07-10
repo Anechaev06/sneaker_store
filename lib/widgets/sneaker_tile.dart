@@ -21,7 +21,17 @@ class _SneakerTileState extends State<SneakerTile> {
   void initState() {
     super.initState();
     isFavorite = FavoritesService().isFavorite(widget.sneaker);
-    _pageController = PageController(); // Initialize the PageController
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _onPageChanged(int index) {
+    setState(() => index);
   }
 
   void _openSneakerDetailsPanel(Sneaker sneaker) {
@@ -42,7 +52,9 @@ class _SneakerTileState extends State<SneakerTile> {
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height * .3,
                   child: PageView.builder(
+                    controller: _pageController,
                     itemCount: sneaker.images.length,
+                    onPageChanged: _onPageChanged,
                     itemBuilder: (context, index) => ClipRRect(
                       borderRadius: BorderRadius.circular(16),
                       child: Image.asset(
