@@ -12,15 +12,14 @@ class FavoritesScreen extends StatelessWidget {
       builder: (context, favoritesService, child) {
         final favorites = favoritesService.getFavorites();
 
-        return ListView.builder(
-          itemCount: favorites.length,
-          itemBuilder: (context, index) {
-            final sneaker = favorites.elementAt(index);
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SneakerTile(sneaker: sneaker),
-            );
-          },
+        return Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: ListView.separated(
+            itemCount: favorites.length,
+            itemBuilder: (context, index) =>
+                SneakerTile(sneaker: favorites.elementAt(index)),
+            separatorBuilder: (context, index) => const SizedBox(height: 10),
+          ),
         );
       },
     );
