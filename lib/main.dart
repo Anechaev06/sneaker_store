@@ -5,6 +5,7 @@ import 'package:sneaker_store/firebase_options.dart';
 import 'package:sneaker_store/models/user_model.dart';
 import 'package:sneaker_store/services/auth_service.dart';
 import 'package:sneaker_store/screens/navigation_screen.dart';
+import 'package:sneaker_store/services/favorites_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +15,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserModel(AuthService())),
+        ChangeNotifierProvider(create: (_) => FavoritesService()),
       ],
       child: const MyApp(),
     ),

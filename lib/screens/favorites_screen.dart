@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sneaker_store/widgets/sneaker_tile.dart';
 import '../services/favorites_service.dart';
 
@@ -7,19 +8,21 @@ class FavoritesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final favorites = FavoritesService().getFavorites().toList();
+    return Consumer<FavoritesService>(
+      builder: (context, favoritesService, child) {
+        final favorites = favoritesService.getFavorites();
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListView.separated(
-        itemCount: favorites.length,
-        itemBuilder: (context, index) {
-          return SneakerTile(sneaker: favorites[index]);
-        },
-        separatorBuilder: (context, index) {
-          return const SizedBox(height: 10);
-        },
-      ),
+        return ListView.builder(
+          itemCount: favorites.length,
+          itemBuilder: (context, index) {
+            final sneaker = favorites.elementAt(index);
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SneakerTile(sneaker: sneaker),
+            );
+          },
+        );
+      },
     );
   }
 }
