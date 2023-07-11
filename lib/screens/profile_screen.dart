@@ -46,9 +46,7 @@ class ProfileScreen extends StatelessWidget {
               "Sign Out",
               "sign out of your account",
               Icons.logout_rounded,
-              () {
-                FirebaseAuth.instance.signOut();
-              },
+              () => FirebaseAuth.instance.signOut(),
             ),
           ],
         ),

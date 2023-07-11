@@ -1,4 +1,3 @@
-// favorites_service.dart
 import '../models/sneaker_model.dart';
 
 class FavoritesService {
@@ -14,7 +13,11 @@ class FavoritesService {
 
   bool isFavorite(Sneaker sneaker) => _favorites.contains(sneaker);
 
-  void addToFavorites(Sneaker sneaker) => _favorites.add(sneaker);
+  void addToFavorites(Sneaker sneaker) {
+    if (!_favorites.contains(sneaker)) {
+      _favorites.add(sneaker);
+    }
+  }
 
   void removeFromFavorites(Sneaker sneaker) => _favorites.remove(sneaker);
 
