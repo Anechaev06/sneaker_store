@@ -9,7 +9,7 @@ class ProfileScreen extends StatelessWidget {
     return SizedBox(
       width: 350,
       child: OutlinedButton(
-        onPressed: onPressed as void Function()?,
+        onPressed: () => onPressed,
         child: ListTile(
           leading: Icon(icon),
           title: Text(title),
