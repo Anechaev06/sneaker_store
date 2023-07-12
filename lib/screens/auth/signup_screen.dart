@@ -1,6 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../services/auth_service.dart';
 
 class SignUpScreen extends StatefulWidget {
   final VoidCallback showSignInScreen;
@@ -16,22 +17,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _passwordController = TextEditingController();
   final _comfirmPasswordController = TextEditingController();
 
+  final AuthService _authService = AuthService();
+
+  Future<void> signUp() async {
+    if (passwordConfirmed()) {
+      // Create user
+      await _authService.signUp(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+    }
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     _comfirmPasswordController.dispose();
     super.dispose();
-  }
-
-  Future signUp() async {
-    if (passwordConfirmed()) {
-      // Create user
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-    }
   }
 
   bool passwordConfirmed() {

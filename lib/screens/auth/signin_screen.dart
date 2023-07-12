@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sneaker_store/screens/auth/forgot_password_screen.dart';
+import '../../services/auth_service.dart';
 
 class SignInScreen extends StatefulWidget {
   final VoidCallback showSignUpScreen;
@@ -13,12 +13,14 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-// Text Controllers
+  // Text Controllers
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
+  final AuthService _authService = AuthService();
+
+  Future<void> signIn() async {
+    await _authService.signIn(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim());
   }
