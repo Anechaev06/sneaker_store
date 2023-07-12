@@ -68,11 +68,11 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(width: 10),
 
               // Filter
-              ElevatedButton(
+              IconButton(
                 onPressed: () {
                   // Navigate to the Filter screen or show a dialog
                 },
-                child: const Icon(Icons.tune),
+                icon: const Icon(Icons.tune),
               )
             ],
           ),

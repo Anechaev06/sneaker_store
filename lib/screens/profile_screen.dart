@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sneaker_store/screens/pages/profile_page.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -16,7 +17,12 @@ class ProfileScreen extends StatelessWidget {
               "Profile",
               "your information",
               Icons.person_rounded,
-              () {},
+              () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProfilePage(),
+                ),
+              ),
             ),
             buildButton(
               "My Orders",

@@ -15,16 +15,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _comfirmPasswordController = TextEditingController();
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     _comfirmPasswordController.dispose();
-    _firstNameController.dispose();
-    _lastNameController.dispose();
     super.dispose();
   }
 
@@ -56,10 +52,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const Icon(Icons.waving_hand_rounded, size: 100),
+                const SizedBox(height: 25),
                 // Titles
                 Column(
                   children: [
-                    const SizedBox(height: 50),
                     Text(
                       "Hello There",
                       style: GoogleFonts.bebasNeue(
@@ -76,37 +73,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                 const SizedBox(height: 25),
 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _firstNameController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            hintText: "First Name",
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: TextField(
-                          controller: _lastNameController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            hintText: "Last Name",
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 15),
                 // Email TextField
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),

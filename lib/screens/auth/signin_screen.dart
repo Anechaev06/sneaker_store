@@ -40,7 +40,7 @@ class _SignInScreenState extends State<SignInScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(Icons.flutter_dash_rounded, size: 100),
-                const SizedBox(height: 50),
+                const SizedBox(height: 25),
                 // Titles
                 Column(
                   children: [
@@ -58,7 +58,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ],
                 ),
 
-                const SizedBox(height: 50),
+                const SizedBox(height: 25),
 
                 // Email TextField
                 Padding(

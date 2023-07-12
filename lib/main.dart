@@ -25,9 +25,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => FavoritesService()),
       ],
       child: MaterialApp(
-        theme: ThemeData(
-          brightness: Brightness.light,
-        ),
+        theme: ThemeData(brightness: Brightness.light, useMaterial3: true),
         debugShowCheckedModeBanner: false,
         home: const NavigationScreen(),
       ),
