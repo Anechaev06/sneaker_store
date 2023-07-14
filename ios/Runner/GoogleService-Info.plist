@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>87630145183-9he2jur32ltt1lt6r8opqedvh88af6vq.apps.googleusercontent.com</string>
+	<string>403938547399-1dl8s27ef334lp5nm2k7tmfmvli51kfn.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.87630145183-9he2jur32ltt1lt6r8opqedvh88af6vq</string>
+	<string>com.googleusercontent.apps.403938547399-1dl8s27ef334lp5nm2k7tmfmvli51kfn</string>
 	<key>API_KEY</key>
-	<string>AIzaSyD5NyTw8KSkq6KxXRcLYQgOytt9MiMcGuU</string>
+	<string>AIzaSyAxce_U1sQVDVVvXZ9LhjupgceGKkYuZjk</string>
 	<key>GCM_SENDER_ID</key>
-	<string>87630145183</string>
+	<string>403938547399</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.sneakerStore</string>
 	<key>PROJECT_ID</key>
-	<string>sneaker-store-bb2f3</string>
+	<string>sneaker-store-61981</string>
 	<key>STORAGE_BUCKET</key>
-	<string>sneaker-store-bb2f3.appspot.com</string>
+	<string>sneaker-store-61981.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:87630145183:ios:f0214d4dafecc760a464aa</string>
+	<string>1:403938547399:ios:e71484f3c209647c1490e2</string>
 </dict>
 </plist>
