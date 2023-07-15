@@ -13,23 +13,23 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  // Text Controllers
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   final AuthService _authService = AuthService();
-
-  Future<void> signIn() async {
-    await _authService.signIn(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim());
-  }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> signIn() async {
+    await _authService.signIn(
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
   }
 
   @override
@@ -101,9 +101,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) {
-                                return const ForgotPasswordScreen();
-                              },
+                              builder: (context) =>
+                                  const ForgotPasswordScreen(),
                             ),
                           );
                         },

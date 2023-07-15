@@ -9,7 +9,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  final _emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   @override
   void dispose() {
@@ -17,7 +17,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     super.dispose();
   }
 
-  Future passwordReset() async {
+  Future<void> passwordReset() async {
     try {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: _emailController.text.trim());
@@ -68,7 +68,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           const SizedBox(height: 15),
 
           ElevatedButton(
-              onPressed: passwordReset, child: const Text("Reset Password"))
+            onPressed: passwordReset,
+            child: const Text("Reset Password"),
+          )
         ],
       ),
     );

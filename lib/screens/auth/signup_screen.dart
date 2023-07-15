@@ -5,6 +5,7 @@ import '../../services/auth_service.dart';
 
 class SignUpScreen extends StatefulWidget {
   final VoidCallback showSignInScreen;
+
   const SignUpScreen({super.key, required this.showSignInScreen});
 
   @override
@@ -12,12 +13,25 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  // Text Controllers
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _comfirmPasswordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   final AuthService _authService = AuthService();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  bool passwordConfirmed() {
+    return _passwordController.text.trim() ==
+        _confirmPasswordController.text.trim();
+  }
 
   Future<void> signUp() async {
     if (passwordConfirmed()) {
@@ -26,23 +40,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-    }
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _comfirmPasswordController.dispose();
-    super.dispose();
-  }
-
-  bool passwordConfirmed() {
-    if (_passwordController.text.trim() ==
-        _comfirmPasswordController.text.trim()) {
-      return true;
-    } else {
-      return false;
+      // Create user data in Firestore
+      await _authService.createUserData(_emailController.text.trim());
     }
   }
 
@@ -110,7 +109,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: TextField(
                     obscureText: true,
-                    controller: _comfirmPasswordController,
+                    controller: _confirmPasswordController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),

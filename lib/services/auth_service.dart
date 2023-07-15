@@ -29,10 +29,11 @@ class AuthService {
       if (docSnapshot.exists) {
         Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
         return UserModel(
-            name: data['name'],
-            city: data['city'],
-            phone: data['phone'],
-            email: data['email']);
+          name: data['name'],
+          city: data['city'],
+          phone: data['phone'],
+          email: data['email'],
+        );
       }
     }
     return UserModel();
@@ -50,5 +51,19 @@ class AuthService {
     }
   }
 
-  // Other methods for sign out, sign up etc can go here
+  Future<void> createUserData(String email) async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      await _firestore.collection('users').doc(user.uid).set({
+        'name': '',
+        'city': '',
+        'phone': '',
+        'email': email,
+      });
+    }
+  }
+
+  Future<void> signOut() async {
+    await _auth.signOut();
+  }
 }

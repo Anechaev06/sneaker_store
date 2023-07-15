@@ -12,6 +12,7 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   // initially, show the login page
   bool showSignInScreen = true;
+
   void togglePages() => setState(() => showSignInScreen = !showSignInScreen);
 
   @override
