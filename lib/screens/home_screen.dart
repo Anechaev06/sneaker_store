@@ -15,6 +15,8 @@ class _HomeScreenState extends State<HomeScreen> {
   // Assume you have a list of Sneakers here
   final List<Sneaker> sneakers = [
     Sneaker(
+      id: '0',
+      name: 'nike_dunk_low_vx1000',
       images: [
         'assets/images/nike/dunk_low_vx1000_1.jpg',
         'assets/images/nike/dunk_low_vx1000_2.jpeg',
@@ -24,6 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
       price: 299.99,
     ),
     Sneaker(
+      id: '1',
+      name: 'dunk_low_gulf_58',
       images: [
         'assets/images/nike/dunk_low_gulf_58_1.jpeg',
         'assets/images/nike/dunk_low_gulf_58_2.jpeg',
@@ -33,16 +37,22 @@ class _HomeScreenState extends State<HomeScreen> {
       price: 399.99,
     ),
     Sneaker(
+      id: '2',
+      name: 'new_balance_550_aime_leon_dore',
       images: ['assets/images/new_balance/nb-White-Green.jpeg'],
       title: 'New Balance 550 Aime Leon Dore - White Green',
       price: 239.99,
     ),
     Sneaker(
+      id: '3',
+      name: 'yeezy_slide_glow_green',
       images: ['assets/images/adidas/adidas_slides.jpeg'],
       title: 'Yeezy Slide Glow Green',
       price: 199.99,
     ),
     Sneaker(
+      id: '4',
+      name: 'adidas_samba_green_gum_grey_toe',
       images: ['assets/images/adidas/samba-green.jpeg'],
       title: 'Adidas Samba OG Collegiate Green Gum Grey Toe',
       price: 249.99,

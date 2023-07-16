@@ -104,9 +104,9 @@ class AuthService {
           .doc(user.uid)
           .collection('favorites')
           .get();
-      // favorites = querySnapshot.docs
-      //     .map((doc) => Sneaker.fromJson(doc.data()))
-      //     .toList();
+      favorites = querySnapshot.docs
+          .map((doc) => Sneaker.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
     }
     return favorites;
   }
