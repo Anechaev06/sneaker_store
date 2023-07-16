@@ -94,7 +94,6 @@ class AuthService {
     }
   }
 
-  // Get favorite sneakers from Firestore
   Future<List<Sneaker>> getFavoriteSneakers() async {
     User? user = _auth.currentUser;
     List<Sneaker> favorites = [];

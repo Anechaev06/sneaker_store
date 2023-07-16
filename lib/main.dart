@@ -21,9 +21,9 @@ class MyApp extends StatelessWidget {
       providers: [
         Provider(create: (_) => AuthService()),
         ChangeNotifierProxyProvider<AuthService, FavoritesService>(
-          create: (_) => FavoritesService(
+          create: (context) => FavoritesService(
               Provider.of<AuthService>(context, listen: false)),
-          update: (_, authService, previous) => FavoritesService(authService),
+          update: (_, authService, __) => FavoritesService(authService),
         ),
       ],
       child: MaterialApp(

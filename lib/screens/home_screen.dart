@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sneaker_store/widgets/sneaker_tile.dart';
 import '../models/sneaker_model.dart';
+import '../services/sneaker_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,53 +12,19 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _controller = TextEditingController();
+  late List<Sneaker> sneakers;
+  final SneakerService _sneakerService = SneakerService();
 
-  // Assume you have a list of Sneakers here
-  final List<Sneaker> sneakers = [
-    Sneaker(
-      id: '0',
-      name: 'nike_dunk_low_vx1000',
-      images: [
-        'assets/images/nike/dunk_low_vx1000_1.jpg',
-        'assets/images/nike/dunk_low_vx1000_2.jpeg',
-        'assets/images/nike/dunk_low_vx1000_3.jpeg'
-      ],
-      title: 'Nike SB Dunk Low VX1000',
-      price: 299.99,
-    ),
-    Sneaker(
-      id: '1',
-      name: 'dunk_low_gulf_58',
-      images: [
-        'assets/images/nike/dunk_low_gulf_58_1.jpeg',
-        'assets/images/nike/dunk_low_gulf_58_2.jpeg',
-        'assets/images/nike/dunk_low_gulf_58_3.jpeg'
-      ],
-      title: 'Dunk SB Low Club 58 Gulf',
-      price: 399.99,
-    ),
-    Sneaker(
-      id: '2',
-      name: 'new_balance_550_aime_leon_dore',
-      images: ['assets/images/new_balance/nb-White-Green.jpeg'],
-      title: 'New Balance 550 Aime Leon Dore - White Green',
-      price: 239.99,
-    ),
-    Sneaker(
-      id: '3',
-      name: 'yeezy_slide_glow_green',
-      images: ['assets/images/adidas/adidas_slides.jpeg'],
-      title: 'Yeezy Slide Glow Green',
-      price: 199.99,
-    ),
-    Sneaker(
-      id: '4',
-      name: 'adidas_samba_green_gum_grey_toe',
-      images: ['assets/images/adidas/samba-green.jpeg'],
-      title: 'Adidas Samba OG Collegiate Green Gum Grey Toe',
-      price: 249.99,
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  void fetchData() async {
+    sneakers = await _sneakerService.getSneakers();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: SearchBar(
                   hintText: "Search",
                   controller: _controller,
-                  onTap: () => {},
+                  onTap: () {
+                    // Implement the search functionality here
+                  },
                 ),
               ),
               const SizedBox(width: 10),
