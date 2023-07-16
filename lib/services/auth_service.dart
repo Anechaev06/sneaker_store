@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sneaker_store/models/user_model.dart';
+import 'package:sneaker_store/models/sneaker_model.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -65,5 +66,48 @@ class AuthService {
 
   Future<void> signOut() async {
     await _auth.signOut();
+  }
+
+  // Save a favorite sneaker to Firestore
+  Future<void> addFavoriteSneaker(Sneaker sneaker) async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('favorites')
+          .doc(sneaker.id) // assuming `id` field in `Sneaker` model
+          .set(sneaker.toJson()); // convert `Sneaker` object to JSON
+    }
+  }
+
+  // Remove a favorite sneaker from Firestore
+  Future<void> removeFavoriteSneaker(Sneaker sneaker) async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('favorites')
+          .doc(sneaker.id)
+          .delete();
+    }
+  }
+
+  // Get favorite sneakers from Firestore
+  Future<List<Sneaker>> getFavoriteSneakers() async {
+    User? user = _auth.currentUser;
+    List<Sneaker> favorites = [];
+    if (user != null) {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .collection('favorites')
+          .get();
+      // favorites = querySnapshot.docs
+      //     .map((doc) => Sneaker.fromJson(doc.data()))
+      //     .toList();
+    }
+    return favorites;
   }
 }
