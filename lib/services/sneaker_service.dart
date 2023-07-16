@@ -18,4 +18,14 @@ class SneakerService {
         await _firestore.collection('sneakers').doc(id).get();
     return Sneaker.fromJson(docSnapshot.data() as Map<String, dynamic>);
   }
+
+  // Add a new sneaker to Firestore
+  Future<void> addSneaker(Sneaker sneaker) {
+    return _firestore.collection('sneakers').doc(sneaker.id).set({
+      'name': sneaker.name,
+      'title': sneaker.title,
+      'price': sneaker.price,
+      'images': sneaker.images,
+    });
+  }
 }

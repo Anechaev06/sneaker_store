@@ -25,15 +25,12 @@ class Sneaker {
   }
 
   // Create a Sneaker object from a JSON map.
-  static Sneaker fromJson(Map<String, dynamic> json) {
-    return Sneaker(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      title: json['title'] as String,
-      price: json['price'] as double,
-      images: List<String>.from(json['images'] as List),
-    );
-  }
+  Sneaker.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        name = json['name'],
+        title = json['title'],
+        price = json['price'].toDouble(),
+        images = List<String>.from(json['images']);
 
   @override
   bool operator ==(Object other) {
