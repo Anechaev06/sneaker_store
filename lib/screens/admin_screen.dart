@@ -49,6 +49,13 @@ class _AdminScreenState extends State<AdminScreen> {
               onSaved: (value) => imageUrl = value ?? '',
             ),
             ElevatedButton(
+              child: const Text('Delete'),
+              onPressed: () async {
+                _formKey.currentState?.save();
+                await _sneakerService.deleteSneaker(id);
+              },
+            ),
+            ElevatedButton(
               child: const Text('Submit'),
               onPressed: () {
                 if (_formKey.currentState?.validate() ?? false) {

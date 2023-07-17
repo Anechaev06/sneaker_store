@@ -23,9 +23,7 @@ class _UploadImagesWidgetState extends State<UploadImagesWidget> {
 
     if (!mounted) return;
 
-    setState(() {
-      images = resultList;
-    });
+    setState(() => images = resultList);
 
     widget.onImagesSelected(images);
   }

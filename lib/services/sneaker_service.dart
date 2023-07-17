@@ -23,4 +23,8 @@ class SneakerService {
         .doc(sneaker.id)
         .set(sneaker.toJson());
   }
+
+  Future<void> deleteSneaker(String id) async {
+    await _firestore.collection('sneakers').doc(id).delete();
+  }
 }
