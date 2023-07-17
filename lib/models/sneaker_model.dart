@@ -1,12 +1,11 @@
 class Sneaker {
   String id;
-  String name;
+
   String title;
   double price;
   List<String> images;
 
   Sneaker({
-    required this.name,
     required this.id,
     required this.title,
     required this.price,
@@ -17,7 +16,6 @@ class Sneaker {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'name': name,
       'title': title,
       'price': price,
       'images': images,
@@ -27,7 +25,6 @@ class Sneaker {
   // Create a Sneaker object from a JSON map.
   Sneaker.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        name = json['name'],
         title = json['title'],
         price = json['price'].toDouble(),
         images = List<String>.from(json['images']);

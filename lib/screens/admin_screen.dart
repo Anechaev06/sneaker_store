@@ -13,7 +13,6 @@ class _AdminScreenState extends State<AdminScreen> {
   final _formKey = GlobalKey<FormState>();
   final _sneakerService = SneakerService();
   String id = '';
-  String name = '';
   String title = '';
   double price = 0.0;
   String imageUrl = "";
@@ -26,52 +25,76 @@ class _AdminScreenState extends State<AdminScreen> {
       ),
       body: Form(
         key: _formKey,
-        child: Column(
-          children: [
-            TextFormField(
-              decoration: const InputDecoration(labelText: 'ID'),
-              onSaved: (value) => id = value ?? '',
-            ),
-            TextFormField(
-              decoration: const InputDecoration(labelText: 'Name'),
-              onSaved: (value) => name = value ?? '',
-            ),
-            TextFormField(
-              decoration: const InputDecoration(labelText: 'Title'),
-              onSaved: (value) => title = value ?? '',
-            ),
-            TextFormField(
-              decoration: const InputDecoration(labelText: 'Price'),
-              onSaved: (value) => price = double.tryParse(value ?? '') ?? 0.0,
-            ),
-            TextFormField(
-              decoration: const InputDecoration(labelText: 'Image url'),
-              onSaved: (value) => imageUrl = value ?? '',
-            ),
-            ElevatedButton(
-              child: const Text('Delete'),
-              onPressed: () async {
-                _formKey.currentState?.save();
-                await _sneakerService.deleteSneaker(id);
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Submit'),
-              onPressed: () {
-                if (_formKey.currentState?.validate() ?? false) {
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'ID',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                onSaved: (value) => id = value ?? '',
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    labelText: 'Title'),
+                onSaved: (value) => title = value ?? '',
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    labelText: 'Price'),
+                onSaved: (value) => price = double.tryParse(value ?? '') ?? 0.0,
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    labelText: 'Image url'),
+                onSaved: (value) => imageUrl = value ?? '',
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                child: const Text('Delete'),
+                onPressed: () async {
                   _formKey.currentState?.save();
-                  final sneaker = Sneaker(
-                    id: id,
-                    name: name,
-                    title: title,
-                    price: price,
-                    images: [imageUrl], // create a new list with the image url
-                  );
-                  _sneakerService.addSneaker(sneaker);
-                }
-              },
-            ),
-          ],
+                  try {
+                    await _sneakerService.deleteSneaker(id);
+                  } catch (e) {
+                    print('Error deleting sneaker: $e');
+                  }
+                },
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                child: const Text('Submit'),
+                onPressed: () {
+                  if (_formKey.currentState?.validate() ?? false) {
+                    _formKey.currentState?.save();
+                    final sneaker = Sneaker(
+                      id: id,
+                      title: title,
+                      price: price,
+                      images: [imageUrl],
+                    );
+                    _sneakerService.addSneaker(sneaker);
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
