@@ -5,10 +5,16 @@ class SneakerService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List<Sneaker>> getSneakers() async {
-    QuerySnapshot querySnapshot = await _firestore.collection('sneakers').get();
-    return querySnapshot.docs
-        .map((doc) => Sneaker.fromJson(doc.data() as Map<String, dynamic>))
-        .toList();
+    try {
+      QuerySnapshot querySnapshot =
+          await _firestore.collection('sneakers').get();
+      return querySnapshot.docs
+          .map((doc) => Sneaker.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print('Error fetching sneakers: $e');
+      throw Exception('Error fetching sneakers');
+    }
   }
 
   Future<Sneaker> getSneakerById(String id) async {

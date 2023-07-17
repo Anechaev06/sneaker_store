@@ -68,7 +68,6 @@ class AuthService {
     await _auth.signOut();
   }
 
-  // Save a favorite sneaker to Firestore
   Future<void> addFavoriteSneaker(Sneaker sneaker) async {
     User? user = _auth.currentUser;
     if (user != null) {
@@ -76,12 +75,11 @@ class AuthService {
           .collection('users')
           .doc(user.uid)
           .collection('favorites')
-          .doc(sneaker.id) // assuming `id` field in `Sneaker` model
-          .set(sneaker.toJson()); // convert `Sneaker` object to JSON
+          .doc(sneaker.id)
+          .set(sneaker.toJson());
     }
   }
 
-  // Remove a favorite sneaker from Firestore
   Future<void> removeFavoriteSneaker(Sneaker sneaker) async {
     User? user = _auth.currentUser;
     if (user != null) {

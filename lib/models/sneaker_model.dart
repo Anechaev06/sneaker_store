@@ -1,18 +1,16 @@
 class Sneaker {
-  String id;
+  final String id;
+  final String title;
+  final double price;
+  final List<String> images;
 
-  String title;
-  double price;
-  List<String> images;
-
-  Sneaker({
+  const Sneaker({
     required this.id,
     required this.title,
     required this.price,
     required this.images,
   });
 
-  // Convert a Sneaker object into a JSON map.
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -22,7 +20,6 @@ class Sneaker {
     };
   }
 
-  // Create a Sneaker object from a JSON map.
   Sneaker.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         title = json['title'],
