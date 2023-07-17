@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sneaker_store/screens/pages/add_sneaker_page.dart';
 import 'package:sneaker_store/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:sneaker_store/constants/colors.dart';
@@ -32,7 +33,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
           List<Widget> screens = [
             const HomeScreen(),
             const FavoritesScreen(),
-            const CartScreen(),
+            // const CartScreen(),
+            const AddSneakerPage(),
             user == null ? const AuthScreen() : const ProfileScreen(),
           ];
 
