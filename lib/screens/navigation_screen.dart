@@ -1,14 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sneaker_store/screens/pages/add_sneaker_page.dart';
 import 'package:sneaker_store/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:sneaker_store/constants/colors.dart';
 import 'package:sneaker_store/screens/auth/auth_screen.dart';
 import 'package:sneaker_store/screens/profile_screen.dart';
-import 'package:sneaker_store/screens/cart_screen.dart';
 import 'package:sneaker_store/screens/favorites_screen.dart';
 import 'package:sneaker_store/screens/home_screen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'cart_screen.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({super.key});
@@ -33,8 +32,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
           List<Widget> screens = [
             const HomeScreen(),
             const FavoritesScreen(),
-            // const CartScreen(),
-            const AddSneakerPage(),
+            const CartScreen(),
             user == null ? const AuthScreen() : const ProfileScreen(),
           ];
 

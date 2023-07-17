@@ -12,18 +12,22 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _controller = TextEditingController();
-  late List<Sneaker> sneakers;
+  List<Sneaker> sneakers = []; // Initialized as an empty list
   final SneakerService _sneakerService = SneakerService();
 
   @override
   void initState() {
     super.initState();
-    fetchData();
+    fetchSneakers();
   }
 
-  void fetchData() async {
-    sneakers = await _sneakerService.getSneakers();
-    setState(() {});
+  void fetchSneakers() async {
+    try {
+      sneakers = await _sneakerService.getSneakers();
+      setState(() {});
+    } catch (e) {
+      print('Error fetching sneakers: $e');
+    }
   }
 
   @override
