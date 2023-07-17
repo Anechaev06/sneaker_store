@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sneaker_store/screens/admin_screen.dart';
 import 'package:sneaker_store/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:sneaker_store/constants/colors.dart';
@@ -7,7 +8,8 @@ import 'package:sneaker_store/screens/profile_screen.dart';
 import 'package:sneaker_store/screens/favorites_screen.dart';
 import 'package:sneaker_store/screens/home_screen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'cart_screen.dart';
+import 'package:sneaker_store/screens/cart_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({super.key});
@@ -19,8 +21,21 @@ class NavigationScreen extends StatefulWidget {
 class _NavigationScreenState extends State<NavigationScreen> {
   int _selectedIndex = 0;
   final AuthService _authService = AuthService();
+  bool _isAdmin = false;
 
   void _onTap(int index) => setState(() => _selectedIndex = index);
+
+  Future<void> checkAdmin(User? user) async {
+    if (user != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+      _isAdmin = userDoc.get('isAdmin') ?? false;
+    } else {
+      _isAdmin = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +44,14 @@ class _NavigationScreenState extends State<NavigationScreen> {
         builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
           User? user = snapshot.data;
 
+          checkAdmin(user);
+
           List<Widget> screens = [
             const HomeScreen(),
             const FavoritesScreen(),
-            const CartScreen(),
+            _isAdmin
+                ? const AdminScreen()
+                : const CartScreen(), // Only for admins
             user == null ? const AuthScreen() : const ProfileScreen(),
           ];
 
@@ -59,14 +78,20 @@ class _NavigationScreenState extends State<NavigationScreen> {
                     tabBackgroundColor: primaryColor,
                     duration: const Duration(milliseconds: 150),
                     gap: 5,
-                    tabs: const [
-                      GButton(
+                    tabs: [
+                      const GButton(
                         icon: Icons.home_rounded,
                         text: "Home",
                       ),
-                      GButton(icon: Icons.favorite_rounded, text: "Likes"),
-                      GButton(icon: Icons.shopping_cart_rounded, text: "Cart"),
-                      GButton(icon: Icons.person_rounded, text: "Profile"),
+                      const GButton(
+                          icon: Icons.favorite_rounded, text: "Likes"),
+                      GButton(
+                          icon: _isAdmin
+                              ? Icons.admin_panel_settings
+                              : Icons.shopping_cart_rounded,
+                          text: _isAdmin ? "Admin" : "Cart"),
+                      const GButton(
+                          icon: Icons.person_rounded, text: "Profile"),
                     ],
                   ),
                 ),

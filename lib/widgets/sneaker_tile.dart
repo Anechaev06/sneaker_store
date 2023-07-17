@@ -40,15 +40,16 @@ class SneakerTile extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.asset(
-                      sneaker.images[0],
-                      height: 100,
-                      width: 200,
-                      fit: BoxFit.cover,
+                  if (sneaker.images.isNotEmpty)
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset(
+                        sneaker.images[0],
+                        height: 100,
+                        width: 200,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(

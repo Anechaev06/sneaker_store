@@ -22,12 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void fetchSneakers() async {
-    try {
-      sneakers = await _sneakerService.getSneakers();
-      setState(() {});
-    } catch (e) {
-      print('Error fetching sneakers: $e');
-    }
+    sneakers = await _sneakerService.getSneakers();
+    setState(() {});
   }
 
   @override
