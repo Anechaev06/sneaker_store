@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../models/sneaker_model.dart';
 import '../services/sneaker_service.dart';
+import 'dart:io';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({super.key});
@@ -15,7 +17,14 @@ class _AdminScreenState extends State<AdminScreen> {
   String id = '';
   String title = '';
   double price = 0.0;
-  String imageUrl = "";
+  List<File> images = [];
+
+  final ImagePicker _picker = ImagePicker();
+
+  Future pickImages() async {
+    final pickedImages = await _picker.pickMultiImage();
+    setState(() => images = pickedImages.map((i) => File(i.path)).toList());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,14 +66,12 @@ class _AdminScreenState extends State<AdminScreen> {
                 onSaved: (value) => price = double.tryParse(value ?? '') ?? 0.0,
               ),
               const SizedBox(height: 10),
-              TextFormField(
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    labelText: 'Image url'),
-                onSaved: (value) => imageUrl = value ?? '',
+              // Adding Images here
+              ElevatedButton(
+                onPressed: pickImages,
+                child: const Text('Pick Images'),
               ),
+
               const SizedBox(height: 10),
               ElevatedButton(
                 child: const Text('Delete'),
@@ -87,9 +94,9 @@ class _AdminScreenState extends State<AdminScreen> {
                       id: id,
                       title: title,
                       price: price,
-                      images: [imageUrl],
+                      images: [], // Temporarily set images to an empty list
                     );
-                    _sneakerService.addSneaker(sneaker);
+                    _sneakerService.addSneaker(sneaker, images);
                   }
                 },
               ),
