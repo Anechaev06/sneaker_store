@@ -6,17 +6,14 @@ class FavoritesService with ChangeNotifier {
   final _favorites = <Sneaker>{};
   final AuthService _authService;
 
-  FavoritesService(this._authService) {
-    initFavorites();
-  }
+  FavoritesService(this._authService);
 
   Future<void> initFavorites() async {
-    // Load favorite sneakers from Firestore when service is initialized
     List<Sneaker> favorites = await _authService.getFavoriteSneakers();
     _favorites
       ..clear()
       ..addAll(favorites);
-    notifyListeners(); // Notify listeners when favorites change
+    notifyListeners();
   }
 
   bool isFavorite(Sneaker sneaker) => _favorites.contains(sneaker);
@@ -25,23 +22,26 @@ class FavoritesService with ChangeNotifier {
     if (!isFavorite(sneaker)) {
       _favorites.add(sneaker);
       await _authService.addFavoriteSneaker(sneaker);
-      notifyListeners(); // Notify listeners when favorites change
+      notifyListeners();
     }
   }
 
   Future<void> removeFromFavorites(Sneaker sneaker) async {
     _favorites.remove(sneaker);
     await _authService.removeFavoriteSneaker(sneaker);
-    notifyListeners(); // Notify listeners when favorites change
+    notifyListeners();
   }
 
-  // Add or remove a sneaker from favorites based on its current status
   Future<void> toggleFavorite(Sneaker sneaker) async {
     isFavorite(sneaker)
         ? await removeFromFavorites(sneaker)
         : await addToFavorites(sneaker);
   }
 
-  // Return an unmodifiable view of favorites
   Iterable<Sneaker> getFavorites() => _favorites.toSet();
+
+  void clearFavorites() {
+    _favorites.clear();
+    notifyListeners();
+  }
 }

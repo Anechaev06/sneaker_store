@@ -19,17 +19,30 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(create: (_) => AuthService()),
+        ChangeNotifierProvider(create: (context) => AuthService()),
         ChangeNotifierProxyProvider<AuthService, FavoritesService>(
           create: (context) => FavoritesService(
               Provider.of<AuthService>(context, listen: false)),
           update: (_, authService, __) => FavoritesService(authService),
         ),
       ],
-      child: MaterialApp(
-        theme: ThemeData(brightness: Brightness.light, useMaterial3: true),
-        debugShowCheckedModeBanner: false,
-        home: const NavigationScreen(),
+      child: Consumer2<AuthService, FavoritesService>(
+        builder: (context, authService, favoritesService, _) {
+          authService.authStateChanges.listen((user) {
+            if (user != null) {
+              // User has logged in, init favorites
+              favoritesService.initFavorites();
+            } else {
+              // User has logged out, clear favorites
+              favoritesService.clearFavorites();
+            }
+          });
+          return MaterialApp(
+            theme: ThemeData(brightness: Brightness.light, useMaterial3: true),
+            debugShowCheckedModeBanner: false,
+            home: const NavigationScreen(),
+          );
+        },
       ),
     );
   }

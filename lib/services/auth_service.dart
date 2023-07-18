@@ -1,12 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:sneaker_store/models/user_model.dart';
 import 'package:sneaker_store/models/sneaker_model.dart';
 
-class AuthService {
+class AuthService with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  AuthService() {
+    _auth.authStateChanges().listen((User? user) {
+      if (user != null) {
+        // User has logged in
+      } else {
+        // User has logged out
+        notifyListeners();
+      }
+    });
+  }
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
   Future<User?> getCurrentUser() async {
