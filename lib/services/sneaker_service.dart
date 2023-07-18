@@ -1,10 +1,11 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/sneaker_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class SneakerService {
+class SneakerService with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List<Sneaker>> getSneakers() async {
@@ -15,7 +16,6 @@ class SneakerService {
           .map((doc) => Sneaker.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
     } catch (e) {
-      print('Error fetching sneakers: $e');
       throw Exception('Error fetching sneakers');
     }
   }
@@ -31,12 +31,8 @@ class SneakerService {
   }
 
   Future<List<String>> uploadImages(List<File> imageFiles, String id) async {
-    List<String> imageUrls = [];
-    for (var imageFile in imageFiles) {
-      String imageUrl = await uploadImageToFirebase(imageFile, id);
-      imageUrls.add(imageUrl);
-    }
-    return imageUrls;
+    return Future.wait(
+        imageFiles.map((imageFile) => uploadImageToFirebase(imageFile, id)));
   }
 
   Future<void> addSneaker(Sneaker sneaker, List<File> imageFiles) async {

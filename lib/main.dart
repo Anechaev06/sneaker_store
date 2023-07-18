@@ -5,6 +5,7 @@ import 'package:sneaker_store/firebase_options.dart';
 import 'package:sneaker_store/screens/navigation_screen.dart';
 import 'package:sneaker_store/services/favorites_service.dart';
 import 'package:sneaker_store/services/auth_service.dart';
+import 'package:sneaker_store/services/sneaker_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,27 +21,28 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthService()),
+        ChangeNotifierProvider(create: (context) => SneakerService()),
         ChangeNotifierProxyProvider<AuthService, FavoritesService>(
           create: (context) => FavoritesService(
               Provider.of<AuthService>(context, listen: false)),
           update: (_, authService, __) => FavoritesService(authService),
         ),
       ],
-      child: Consumer2<AuthService, FavoritesService>(
-        builder: (context, authService, favoritesService, _) {
-          authService.authStateChanges.listen((user) {
-            if (user != null) {
-              favoritesService.initFavorites();
-            } else {
-              favoritesService.clearFavorites();
-            }
-          });
-          return MaterialApp(
-            theme: ThemeData(brightness: Brightness.light, useMaterial3: true),
-            debugShowCheckedModeBanner: false,
-            home: const NavigationScreen(),
-          );
-        },
+      child: MaterialApp(
+        theme: ThemeData(brightness: Brightness.light, useMaterial3: true),
+        debugShowCheckedModeBanner: false,
+        home: Consumer2<AuthService, FavoritesService>(
+          builder: (context, authService, favoritesService, _) {
+            authService.authStateChanges.listen((user) {
+              if (user != null) {
+                favoritesService.initFavorites();
+              } else {
+                favoritesService.clearFavorites();
+              }
+            });
+            return const NavigationScreen();
+          },
+        ),
       ),
     );
   }

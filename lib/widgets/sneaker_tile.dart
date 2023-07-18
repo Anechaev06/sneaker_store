@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../services/favorites_service.dart';
 import '../models/sneaker_model.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import '../services/sneaker_service.dart';
 
 class SneakerTile extends StatelessWidget {
   final Sneaker sneaker;
@@ -12,6 +13,7 @@ class SneakerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sneakerService = Provider.of<SneakerService>(context, listen: false);
     return GestureDetector(
       onTap: () => showModalBottomSheet(
         context: context,
@@ -22,12 +24,26 @@ class SneakerTile extends StatelessWidget {
         builder: (context, favoritesService, child) => Card(
           elevation: 5,
           child: Slidable(
+            startActionPane: ActionPane(
+              motion: const StretchMotion(),
+              children: [
+                SlidableAction(
+                  label: "Delete",
+                  borderRadius: BorderRadius.circular(10),
+                  backgroundColor: Colors.red,
+                  icon: Icons.delete,
+                  onPressed: (_) async =>
+                      await sneakerService.deleteSneaker(sneaker.id),
+                )
+              ],
+            ),
             endActionPane: ActionPane(
               motion: const StretchMotion(),
               children: [
                 SlidableAction(
                   borderRadius: BorderRadius.circular(10),
-                  onPressed: (_) => favoritesService.toggleFavorite(sneaker),
+                  onPressed: (_) async =>
+                      favoritesService.toggleFavorite(sneaker),
                   icon: favoritesService.isFavorite(sneaker)
                       ? Icons.favorite
                       : Icons.favorite_border,

@@ -9,33 +9,32 @@ class FavoritesService with ChangeNotifier {
   FavoritesService(this._authService);
 
   Future<void> initFavorites() async {
-    List<Sneaker> favorites = await _authService.getFavoriteSneakers();
     _favorites
       ..clear()
-      ..addAll(favorites);
+      ..addAll(await _authService.getFavoriteSneakers());
     notifyListeners();
   }
 
   bool isFavorite(Sneaker sneaker) => _favorites.contains(sneaker);
 
-  Future<void> addToFavorites(Sneaker sneaker) async {
-    if (!isFavorite(sneaker)) {
-      _favorites.add(sneaker);
-      await _authService.addFavoriteSneaker(sneaker);
-      notifyListeners();
+  Future<void> toggleFavorite(Sneaker sneaker) async {
+    if (isFavorite(sneaker)) {
+      await removeFromFavorites(sneaker);
+    } else {
+      await addToFavorites(sneaker);
     }
+  }
+
+  Future<void> addToFavorites(Sneaker sneaker) async {
+    _favorites.add(sneaker);
+    await _authService.addFavoriteSneaker(sneaker);
+    notifyListeners();
   }
 
   Future<void> removeFromFavorites(Sneaker sneaker) async {
     _favorites.remove(sneaker);
     await _authService.removeFavoriteSneaker(sneaker);
     notifyListeners();
-  }
-
-  Future<void> toggleFavorite(Sneaker sneaker) async {
-    isFavorite(sneaker)
-        ? await removeFromFavorites(sneaker)
-        : await addToFavorites(sneaker);
   }
 
   Iterable<Sneaker> getFavorites() => _favorites.toSet();

@@ -8,19 +8,9 @@ class AuthService with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  AuthService() {
-    _auth.authStateChanges().listen((User? user) {
-      if (user != null) {
-      } else {
-        notifyListeners();
-      }
-    });
-  }
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  Future<User?> getCurrentUser() async {
-    return _auth.currentUser;
-  }
+  Future<User?> getCurrentUser() async => _auth.currentUser;
 
   Future<void> signIn({required String email, required String password}) async {
     await _auth.signInWithEmailAndPassword(email: email, password: password);
@@ -73,9 +63,7 @@ class AuthService with ChangeNotifier {
     }
   }
 
-  Future<void> signOut() async {
-    await _auth.signOut();
-  }
+  Future<void> signOut() async => await _auth.signOut();
 
   Future<void> addFavoriteSneaker(Sneaker sneaker) async {
     User? user = _auth.currentUser;

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sneaker_store/screens/pages/edit_sneaker_page.dart';
-import 'package:sneaker_store/screens/pages/new_sneaker_page.dart';
-import '../constants/colors.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import '../models/sneaker_model.dart';
+import '../services/sneaker_service.dart';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({super.key});
@@ -11,124 +12,90 @@ class AdminScreen extends StatefulWidget {
 }
 
 class _AdminScreenState extends State<AdminScreen> {
-  final PageController _pageController = PageController();
-  final ValueNotifier<int> _currentPageIndex = ValueNotifier<int>(0);
+  final _formKey = GlobalKey<FormState>();
+  final _sneakerService = SneakerService();
+  String id = '';
+  String title = '';
+  double price = 0.0;
+  List<File> images = [];
+  final ImagePicker _picker = ImagePicker();
 
-  void _changePage(int index) {
-    _currentPageIndex.value = index;
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeOut,
-    );
+  Future pickImages() async {
+    final pickedImages = await _picker.pickMultiImage();
+    setState(() => images = pickedImages.map((i) => File(i.path)).toList());
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Form(
+      key: _formKey,
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ToggleButtonRow(
-              currentIndex: _currentPageIndex,
-              onPageSelected: _changePage,
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height -
-                  kToolbarHeight -
-                  kBottomNavigationBarHeight -
-                  MediaQuery.of(context).padding.top,
-              child: ValueListenableBuilder(
-                valueListenable: _currentPageIndex,
-                builder: (context, value, child) {
-                  return PageView(
-                    controller: _pageController,
-                    onPageChanged: _changePage,
-                    children: const [
-                      NewSneakerPage(),
-                      EditSneakerPage(),
-                    ],
-                  );
-                },
+            TextFormField(
+              initialValue: id,
+              decoration: InputDecoration(
+                labelText: 'ID',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
               ),
+              onSaved: (value) => id = value ?? '',
             ),
+            const SizedBox(height: 10),
+            TextFormField(
+              initialValue: title,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  labelText: 'Title'),
+              onSaved: (value) => title = value ?? '',
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              initialValue: price.toString(),
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  labelText: 'Price'),
+              onSaved: (value) => price = double.tryParse(value ?? '') ?? 0.0,
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: pickImages,
+              child: const Text('Pick Images'),
+            ),
+            const SizedBox(height: 10),
+            // ElevatedButton(
+            //   child: const Text('Delete'),
+            //   onPressed: () async {
+            //     await _sneakerService.deleteSneaker(id);
+            //   },
+            // ),
+            // const SizedBox(height: 10),
+            ElevatedButton(
+                child: const Text('Add Sneaker'),
+                onPressed: () {
+                  if (_formKey.currentState?.validate() ?? false) {
+                    _formKey.currentState?.save();
+                    final sneaker = Sneaker(
+                      id: id,
+                      title: title,
+                      price: price,
+                      images: [],
+                    );
+                    _sneakerService.addSneaker(sneaker, images);
+                    _formKey.currentState?.reset();
+                    setState(() => images.clear());
+                  }
+                }),
           ],
         ),
       ),
-    );
-  }
-}
-
-class ToggleButtonRow extends StatelessWidget {
-  final ValueNotifier<int> currentIndex;
-  final ValueChanged<int> onPageSelected;
-
-  const ToggleButtonRow({
-    super.key,
-    required this.currentIndex,
-    required this.onPageSelected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        ToggleButton(
-          text: 'Upload',
-          index: 0,
-          currentIndex: currentIndex,
-          onPressed: () => onPageSelected(0),
-        ),
-        ToggleButton(
-          text: 'Edit',
-          index: 1,
-          currentIndex: currentIndex,
-          onPressed: () => onPageSelected(1),
-        ),
-      ],
-    );
-  }
-}
-
-class ToggleButton extends StatelessWidget {
-  final String text;
-  final int index;
-  final ValueNotifier<int> currentIndex;
-  final VoidCallback onPressed;
-
-  const ToggleButton({
-    super.key,
-    required this.text,
-    required this.index,
-    required this.currentIndex,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<int>(
-      valueListenable: currentIndex,
-      builder: (context, value, child) {
-        final isSelected = index == value;
-
-        return ElevatedButton(
-          onPressed: onPressed,
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-              isSelected ? primaryColor : Colors.grey,
-            ),
-          ),
-          child: Text(
-            text,
-            style: TextStyle(
-              color: isSelected ? secondColor : Colors.black,
-            ),
-          ),
-        );
-      },
     );
   }
 }
