@@ -43,7 +43,7 @@ class SneakerTile extends StatelessWidget {
                   if (sneaker.images.isNotEmpty)
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
-                      child: Image.asset(
+                      child: Image.network(
                         sneaker.images[0],
                         height: 100,
                         width: 200,
@@ -109,7 +109,7 @@ class SneakerDetailsPanel extends StatelessWidget {
                 itemCount: sneaker.images.length,
                 itemBuilder: (context, index) => ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: Image.asset(
+                  child: Image.network(
                     sneaker.images[index],
                     fit: BoxFit.cover,
                   ),
