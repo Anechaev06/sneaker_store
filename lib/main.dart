@@ -30,10 +30,8 @@ class MyApp extends StatelessWidget {
         builder: (context, authService, favoritesService, _) {
           authService.authStateChanges.listen((user) {
             if (user != null) {
-              // User has logged in, init favorites
               favoritesService.initFavorites();
             } else {
-              // User has logged out, clear favorites
               favoritesService.clearFavorites();
             }
           });

@@ -11,9 +11,7 @@ class AuthService with ChangeNotifier {
   AuthService() {
     _auth.authStateChanges().listen((User? user) {
       if (user != null) {
-        // User has logged in
       } else {
-        // User has logged out
         notifyListeners();
       }
     });
