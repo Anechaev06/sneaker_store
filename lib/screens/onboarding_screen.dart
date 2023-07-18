@@ -33,7 +33,7 @@ class OnBoardingScreen extends StatelessWidget {
               ),
               SizedBox(
                 height: 500,
-                child: Image.asset("assets/images/sneakers.jpg"),
+                // child: Image.asset("assets/images/sneakers.jpg"),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.push(
