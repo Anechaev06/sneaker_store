@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sneaker_store/widgets/sneaker_tile.dart';
 import '../models/sneaker_model.dart';
@@ -12,19 +13,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _controller = TextEditingController();
-  List<Sneaker> sneakers = []; // Initialized as an empty list
   final SneakerService _sneakerService = SneakerService();
-
-  @override
-  void initState() {
-    super.initState();
-    fetchSneakers();
-  }
-
-  void fetchSneakers() async {
-    sneakers = await _sneakerService.getSneakers();
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +49,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
           // Sneakers
           Expanded(
-            child: ListView.separated(
-              itemCount: sneakers.length,
-              itemBuilder: (context, index) {
-                return SneakerTile(sneaker: sneakers[index]);
-              },
-              separatorBuilder: (context, index) {
-                return const SizedBox(height: 10);
+            child: StreamBuilder<QuerySnapshot>(
+              stream: _sneakerService.getSneakersStream(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return const Text('Something went wrong');
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+
+                List<Sneaker> sneakers = snapshot.data!.docs
+                    .map((doc) =>
+                        Sneaker.fromJson(doc.data() as Map<String, dynamic>))
+                    .toList();
+
+                return ListView.separated(
+                  itemCount: sneakers.length,
+                  itemBuilder: (context, index) {
+                    return SneakerTile(sneaker: sneakers[index]);
+                  },
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(height: 10);
+                  },
+                );
               },
             ),
           ),

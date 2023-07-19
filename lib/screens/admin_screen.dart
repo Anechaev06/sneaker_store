@@ -15,7 +15,9 @@ class _AdminScreenState extends State<AdminScreen> {
   final _formKey = GlobalKey<FormState>();
   final _sneakerService = SneakerService();
   String id = '';
-  String title = '';
+  String name = '';
+  String brand = '';
+  String description = '';
   double price = 0.0;
   List<File> images = [];
   final ImagePicker _picker = ImagePicker();
@@ -46,13 +48,35 @@ class _AdminScreenState extends State<AdminScreen> {
             ),
             const SizedBox(height: 10),
             TextFormField(
-              initialValue: title,
+              initialValue: name,
               decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  labelText: 'Title'),
-              onSaved: (value) => title = value ?? '',
+                  labelText: 'Name'),
+              onSaved: (value) => name = value ?? '',
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              initialValue: brand, // Add this block
+              decoration: InputDecoration(
+                labelText: 'Brand',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              onSaved: (value) => brand = value ?? '',
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              initialValue: description,
+              decoration: InputDecoration(
+                labelText: 'Description',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              onSaved: (value) => description = value ?? '',
             ),
             const SizedBox(height: 10),
             TextFormField(
@@ -84,8 +108,10 @@ class _AdminScreenState extends State<AdminScreen> {
                     _formKey.currentState?.save();
                     final sneaker = Sneaker(
                       id: id,
-                      title: title,
+                      name: name,
                       price: price,
+                      brand: brand,
+                      description: description,
                       images: [],
                     );
                     _sneakerService.addSneaker(sneaker, images);

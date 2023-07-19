@@ -31,10 +31,10 @@ class OnBoardingScreen extends StatelessWidget {
                     fontSize: 16,
                     color: Colors.white),
               ),
-              SizedBox(
-                height: 500,
-                // child: Image.asset("assets/images/sneakers.jpg"),
-              ),
+              // SizedBox(
+              //   height: 500,
+              // child: Image.asset("assets/images/sneakers.jpg"),
+              // ),
               ElevatedButton(
                 onPressed: () => Navigator.push(
                   context,

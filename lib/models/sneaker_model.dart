@@ -1,29 +1,37 @@
 class Sneaker {
   final String id;
-  final String title;
+  final String name;
   final double price;
+  final String brand;
+  final String description;
   final List<String> images;
 
   const Sneaker({
     required this.id,
-    required this.title,
+    required this.name,
     required this.price,
+    required this.brand,
+    required this.description,
     required this.images,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'title': title,
+      'name': name,
       'price': price,
+      'brand': brand,
+      'description': description,
       'images': images,
     };
   }
 
   Sneaker.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        title = json['title'],
+        name = json['name'],
         price = json['price'].toDouble(),
+        brand = json['brand'],
+        description = json['description'],
         images = List<String>.from(json['images']);
 
   @override

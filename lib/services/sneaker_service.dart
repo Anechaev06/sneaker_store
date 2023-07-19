@@ -20,27 +20,36 @@ class SneakerService with ChangeNotifier {
     }
   }
 
-  Future<String> uploadImageToFirebase(File imageFile, String id) async {
+  Stream<QuerySnapshot> getSneakersStream() {
+    return _firestore.collection('sneakers').snapshots();
+  }
+
+  Future<String> uploadImageToFirebase(
+      File imageFile, String id, String brand) async {
     String fileName = basename(imageFile.path);
     Reference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('sneakers/$id/$fileName');
+        FirebaseStorage.instance.ref().child('sneakers/$brand/$id/$fileName');
     UploadTask uploadTask = firebaseStorageRef.putFile(imageFile);
     TaskSnapshot taskSnapshot = await uploadTask;
     String downloadUrl = await taskSnapshot.ref.getDownloadURL();
     return downloadUrl;
   }
 
-  Future<List<String>> uploadImages(List<File> imageFiles, String id) async {
-    return Future.wait(
-        imageFiles.map((imageFile) => uploadImageToFirebase(imageFile, id)));
+  Future<List<String>> uploadImages(
+      List<File> imageFiles, String id, String brand) async {
+    return Future.wait(imageFiles
+        .map((imageFile) => uploadImageToFirebase(imageFile, id, brand)));
   }
 
   Future<void> addSneaker(Sneaker sneaker, List<File> imageFiles) async {
-    List<String> imageUrls = await uploadImages(imageFiles, sneaker.id);
+    List<String> imageUrls =
+        await uploadImages(imageFiles, sneaker.id, sneaker.brand);
     sneaker = Sneaker(
       id: sneaker.id,
-      title: sneaker.title,
+      name: sneaker.name,
       price: sneaker.price,
+      brand: sneaker.brand,
+      description: sneaker.description,
       images: imageUrls,
     );
     await _firestore
@@ -53,6 +62,17 @@ class SneakerService with ChangeNotifier {
     DocumentSnapshot docSnapshot =
         await _firestore.collection('sneakers').doc(id).get();
     return Sneaker.fromJson(docSnapshot.data() as Map<String, dynamic>);
+  }
+
+  Future<List<String>> getSneakerImagesByBrand(String brand) async {
+    List<String> imageUrls = [];
+    ListResult listResult =
+        await FirebaseStorage.instance.ref('sneakers/$brand').listAll();
+    for (Reference ref in listResult.items) {
+      String url = await ref.getDownloadURL();
+      imageUrls.add(url);
+    }
+    return imageUrls;
   }
 
   Future<void> deleteSneaker(String id) async {
