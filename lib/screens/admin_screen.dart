@@ -94,13 +94,6 @@ class _AdminScreenState extends State<AdminScreen> {
               child: const Text('Pick Images'),
             ),
             const SizedBox(height: 10),
-            // ElevatedButton(
-            //   child: const Text('Delete'),
-            //   onPressed: () async {
-            //     await _sneakerService.deleteSneaker(id);
-            //   },
-            // ),
-            // const SizedBox(height: 10),
             ElevatedButton(
                 child: const Text('Add Sneaker'),
                 onPressed: () {
