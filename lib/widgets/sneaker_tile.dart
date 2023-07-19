@@ -5,16 +5,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:sneaker_store/widgets/sneaker_details_panel.dart';
 import '../services/favorites_service.dart';
 import '../services/sneaker_service.dart';
+import '../services/auth_service.dart';
 import '../models/sneaker_model.dart';
 
 class SneakerTile extends StatelessWidget {
   final Sneaker sneaker;
 
-  const SneakerTile({super.key, required this.sneaker});
+  const SneakerTile({Key? key, required this.sneaker}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final sneakerService = Provider.of<SneakerService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+
     return GestureDetector(
       onTap: () => showModalBottomSheet(
         context: context,
@@ -22,13 +25,20 @@ class SneakerTile extends StatelessWidget {
         builder: (context) => SneakerDetailsPanel(sneaker: sneaker),
       ),
       child: Consumer<FavoritesService>(
-        builder: (context, favoritesService, child) => Card(
-          elevation: 5,
-          child: Slidable(
-            startActionPane: _buildStartActionPane(sneakerService),
-            endActionPane: _buildEndActionPane(favoritesService),
-            child: _buildSneakerTile(favoritesService),
-          ),
+        builder: (context, favoritesService, child) => FutureBuilder<bool>(
+          future: authService.isAdmin(),
+          builder: (context, snapshot) {
+            return Card(
+              elevation: 5,
+              child: Slidable(
+                startActionPane: snapshot.data == true
+                    ? _buildStartActionPane(sneakerService)
+                    : null,
+                endActionPane: _buildEndActionPane(favoritesService),
+                child: _buildSneakerTile(favoritesService),
+              ),
+            );
+          },
         ),
       ),
     );

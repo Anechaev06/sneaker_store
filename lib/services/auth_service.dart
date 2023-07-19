@@ -26,7 +26,7 @@ class AuthService with ChangeNotifier {
     if (user != null) {
       DocumentSnapshot docSnapshot =
           await _firestore.collection('users').doc(user.uid).get();
-      if (docSnapshot.exists) {
+      if (docSnapshot.exists && docSnapshot.data() is Map<String, dynamic>) {
         Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
         return UserModel(
           name: data['name'],
@@ -103,5 +103,19 @@ class AuthService with ChangeNotifier {
           .toList();
     }
     return favorites;
+  }
+
+  Future<bool> isAdmin() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      DocumentSnapshot docSnapshot =
+          await _firestore.collection('users').doc(user.uid).get();
+      if (docSnapshot.exists && docSnapshot.data() is Map<String, dynamic>) {
+        Map<String, dynamic> data =
+            docSnapshot.data() as Map<String, dynamic>; // Type cast added here
+        return data['isAdmin'] ?? false;
+      }
+    }
+    return false;
   }
 }
