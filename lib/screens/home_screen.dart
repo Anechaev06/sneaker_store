@@ -13,53 +13,89 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _controller = TextEditingController();
   String _currentBrand = 'All'; // Variable to store the current brand filter
 
   @override
   Widget build(BuildContext context) {
     final sneakerService = Provider.of<SneakerService>(context, listen: false);
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Column(
+        children: [
+          // Search Bar
+          Row(
+            children: [
+              Expanded(
+                child: SearchBar(
+                  hintText: "Search",
+                  controller: _controller,
+                  onTap: () {
+                    // Implement the search functionality here
+                  },
+                ),
+              ),
+              const SizedBox(width: 10),
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Sneaker Store'),
-        actions: [
-          // PopupMenuButton to allow the user to select a brand
-          PopupMenuButton<String>(
-            onSelected: (String brand) {
-              setState(() {
-                _currentBrand = brand;
-              });
-            },
-            itemBuilder: (BuildContext context) {
-              return ['All', 'Brand1', 'Brand2', 'Brand3'].map((String brand) {
-                return PopupMenuItem<String>(
-                  value: brand,
-                  child: Text(brand),
+              // Filter
+              PopupMenuButton<String>(
+                onSelected: (String brand) {
+                  setState(() {
+                    _currentBrand = brand;
+                  });
+                },
+                itemBuilder: (BuildContext context) {
+                  return ['All', 'Nike', 'Adidas'].map((String brand) {
+                    return PopupMenuItem<String>(
+                      value: brand,
+                      child: Text(brand),
+                    );
+                  }).toList();
+                },
+                icon: const Icon(Icons.tune),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 20),
+
+          // Sneakers
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: sneakerService.getSneakersStream(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return const Text('Something went wrong');
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+
+                List<Sneaker> sneakers = snapshot.data!.docs
+                    .map((doc) =>
+                        Sneaker.fromJson(doc.data() as Map<String, dynamic>))
+                    .toList();
+
+                if (_currentBrand != 'All') {
+                  sneakers = sneakers
+                      .where((sneaker) => sneaker.brand == _currentBrand)
+                      .toList();
+                }
+
+                return ListView.separated(
+                  itemCount: sneakers.length,
+                  itemBuilder: (context, index) {
+                    return SneakerTile(sneaker: sneakers[index]);
+                  },
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(height: 10);
+                  },
                 );
-              }).toList();
-            },
+              },
+            ),
           ),
         ],
-      ),
-      body: FutureBuilder<List<Sneaker>>(
-        // Use the current brand to fetch the sneakers
-        future: _currentBrand == 'All'
-            ? sneakerService.getSneakers()
-            : sneakerService.getSneakersByBrand(_currentBrand),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return SneakerTile(sneaker: snapshot.data![index]);
-              },
-            );
-          }
-        },
       ),
     );
   }
