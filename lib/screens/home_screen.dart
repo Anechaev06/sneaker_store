@@ -31,7 +31,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   hintText: "Search",
                   controller: _controller,
                   onTap: () {
-                    // Implement the search functionality here
+                    String searchQuery = _controller.text;
+                    sneakerService
+                        .getSneakersByName(searchQuery)
+                        .then((List<Sneaker> searchResults) {
+                      // Do something with the search results
+                    });
                   },
                 ),
               ),
@@ -43,13 +48,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<String>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator(); // Show loading spinner while waiting
+                    return const CircularProgressIndicator(); // Show loading spinner while waiting
                   } else if (snapshot.hasError) {
                     return Text(
                         'Error: ${snapshot.error}'); // Show error message if something went wrong
                   } else {
                     List<String> brands = snapshot.data!;
-                    brands.insert(0, 'All'); // Add 'All' at the beginning
+                    brands.insert(0, 'All');
                     return PopupMenuButton<String>(
                       onSelected: (String brand) {
                         setState(() {

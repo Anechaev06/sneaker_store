@@ -93,6 +93,21 @@ class SneakerService with ChangeNotifier {
     }
   }
 
+  Future<List<Sneaker>> getSneakersByName(String name) async {
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('sneakers')
+          .where('name', isGreaterThanOrEqualTo: name)
+          .where('name', isLessThan: '${name}z')
+          .get();
+      return querySnapshot.docs
+          .map((doc) => Sneaker.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      throw Exception('Error fetching sneakers');
+    }
+  }
+
   Future<List<String>> getBrands() async {
     try {
       QuerySnapshot querySnapshot =
