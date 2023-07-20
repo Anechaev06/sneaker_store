@@ -14,7 +14,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _controller = TextEditingController();
-  String _currentBrand = 'All'; // Variable to store the current brand filter
+  String _currentBrand = 'All';
+  List<Sneaker>? _searchResults;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     sneakerService
                         .getSneakersByName(searchQuery)
                         .then((List<Sneaker> searchResults) {
-                      // Do something with the search results
+                      setState(() {
+                        _searchResults = searchResults;
+                      });
                     });
                   },
                 ),
@@ -92,10 +95,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   return const CircularProgressIndicator();
                 }
 
-                List<Sneaker> sneakers = snapshot.data!.docs
-                    .map((doc) =>
-                        Sneaker.fromJson(doc.data() as Map<String, dynamic>))
-                    .toList();
+                List<Sneaker> sneakers = _searchResults != null
+                    ? _searchResults!
+                    : snapshot.data!.docs
+                        .map((doc) => Sneaker.fromJson(
+                            doc.data() as Map<String, dynamic>))
+                        .toList();
 
                 if (_currentBrand != 'All') {
                   sneakers = sneakers
