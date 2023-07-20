@@ -95,10 +95,14 @@ class SneakerService with ChangeNotifier {
 
   Future<List<String>> getBrands() async {
     try {
-      QuerySnapshot querySnapshot = await _firestore.collection('brands').get();
-      return querySnapshot.docs
-          .map((doc) => (doc.data() as Map<String, dynamic>)['name'] as String)
+      QuerySnapshot querySnapshot =
+          await _firestore.collection('sneakers').get();
+      var brands = querySnapshot.docs
+          .map((doc) => (doc.data() as Map<String, dynamic>)['brand'] as String)
+          .toSet()
           .toList();
+      brands.sort(); // Optional: to sort alphabetically
+      return brands;
     } catch (e) {
       throw Exception('Error fetching brands');
     }

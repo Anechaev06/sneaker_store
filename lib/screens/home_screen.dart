@@ -38,25 +38,36 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(width: 10),
 
               // Filter
-              PopupMenuButton<String>(
-                onSelected: (String brand) {
-                  setState(() {
-                    _currentBrand = brand;
-                  });
-                },
-                itemBuilder: (BuildContext context) {
-                  return [
-                    'All',
-                    'Adidas',
-                    'Nike',
-                  ].map((String brand) {
-                    return PopupMenuItem<String>(
-                      value: brand,
-                      child: Text(brand),
+              FutureBuilder<List<String>>(
+                future: sneakerService.getBrands(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<String>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator(); // Show loading spinner while waiting
+                  } else if (snapshot.hasError) {
+                    return Text(
+                        'Error: ${snapshot.error}'); // Show error message if something went wrong
+                  } else {
+                    List<String> brands = snapshot.data!;
+                    brands.insert(0, 'All'); // Add 'All' at the beginning
+                    return PopupMenuButton<String>(
+                      onSelected: (String brand) {
+                        setState(() {
+                          _currentBrand = brand;
+                        });
+                      },
+                      itemBuilder: (BuildContext context) {
+                        return brands.map((String brand) {
+                          return PopupMenuItem<String>(
+                            value: brand,
+                            child: Text(brand),
+                          );
+                        }).toList();
+                      },
+                      icon: const Icon(Icons.tune),
                     );
-                  }).toList();
+                  }
                 },
-                icon: const Icon(Icons.tune),
               ),
             ],
           ),
