@@ -78,4 +78,18 @@ class SneakerService with ChangeNotifier {
   Future<void> deleteSneaker(String id) async {
     await _firestore.collection('sneakers').doc(id).delete();
   }
+
+  Future<List<Sneaker>> getSneakersByBrand(String brand) async {
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('sneakers')
+          .where('brand', isEqualTo: brand)
+          .get();
+      return querySnapshot.docs
+          .map((doc) => Sneaker.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      throw Exception('Error fetching sneakers');
+    }
+  }
 }
