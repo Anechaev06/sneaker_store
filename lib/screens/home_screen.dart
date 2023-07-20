@@ -45,7 +45,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   });
                 },
                 itemBuilder: (BuildContext context) {
-                  return ['All', 'Nike', 'Adidas'].map((String brand) {
+                  return [
+                    'All',
+                    'Adidas',
+                    'Nike',
+                  ].map((String brand) {
                     return PopupMenuItem<String>(
                       value: brand,
                       child: Text(brand),

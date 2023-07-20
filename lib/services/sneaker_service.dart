@@ -92,4 +92,15 @@ class SneakerService with ChangeNotifier {
       throw Exception('Error fetching sneakers');
     }
   }
+
+  Future<List<String>> getBrands() async {
+    try {
+      QuerySnapshot querySnapshot = await _firestore.collection('brands').get();
+      return querySnapshot.docs
+          .map((doc) => (doc.data() as Map<String, dynamic>)['name'] as String)
+          .toList();
+    } catch (e) {
+      throw Exception('Error fetching brands');
+    }
+  }
 }
