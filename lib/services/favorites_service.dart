@@ -9,9 +9,8 @@ class FavoritesService with ChangeNotifier {
   FavoritesService(this._authService);
 
   Future<void> initFavorites() async {
-    _favorites
-      ..clear()
-      ..addAll(await _authService.getFavoriteSneakers());
+    _favorites.clear();
+    _favorites.addAll(await _authService.getFavoriteSneakers());
     notifyListeners();
   }
 

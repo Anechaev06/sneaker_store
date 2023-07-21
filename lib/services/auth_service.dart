@@ -22,12 +22,12 @@ class AuthService with ChangeNotifier {
   }
 
   Future<UserModel> getUserData() async {
-    User? user = _auth.currentUser;
+    final user = _auth.currentUser;
     if (user != null) {
-      DocumentSnapshot docSnapshot =
+      final docSnapshot =
           await _firestore.collection('users').doc(user.uid).get();
-      if (docSnapshot.exists && docSnapshot.data() is Map<String, dynamic>) {
-        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+      if (docSnapshot.exists && docSnapshot.data() != null) {
+        final data = docSnapshot.data() as Map<String, dynamic>;
         return UserModel(
           name: data['name'],
           city: data['city'],
@@ -40,19 +40,18 @@ class AuthService with ChangeNotifier {
   }
 
   Future<void> updateUserData(UserModel userModel) async {
-    User? user = _auth.currentUser;
+    final user = _auth.currentUser;
     if (user != null) {
       await _firestore.collection('users').doc(user.uid).update({
         'name': userModel.name,
         'city': userModel.city,
         'phone': userModel.phone,
-        // email is not updated because it's linked to the authentication
       });
     }
   }
 
   Future<void> createUserData(String email) async {
-    User? user = _auth.currentUser;
+    final user = _auth.currentUser;
     if (user != null) {
       await _firestore.collection('users').doc(user.uid).set({
         'name': '',
@@ -66,7 +65,7 @@ class AuthService with ChangeNotifier {
   Future<void> signOut() async => await _auth.signOut();
 
   Future<void> addFavoriteSneaker(Sneaker sneaker) async {
-    User? user = _auth.currentUser;
+    final user = _auth.currentUser;
     if (user != null) {
       await _firestore
           .collection('users')
@@ -78,7 +77,7 @@ class AuthService with ChangeNotifier {
   }
 
   Future<void> removeFavoriteSneaker(Sneaker sneaker) async {
-    User? user = _auth.currentUser;
+    final user = _auth.currentUser;
     if (user != null) {
       await _firestore
           .collection('users')
@@ -90,29 +89,28 @@ class AuthService with ChangeNotifier {
   }
 
   Future<List<Sneaker>> getFavoriteSneakers() async {
-    User? user = _auth.currentUser;
+    final user = _auth.currentUser;
     List<Sneaker> favorites = [];
     if (user != null) {
-      QuerySnapshot querySnapshot = await _firestore
+      final querySnapshot = await _firestore
           .collection('users')
           .doc(user.uid)
           .collection('favorites')
           .get();
       favorites = querySnapshot.docs
-          .map((doc) => Sneaker.fromJson(doc.data() as Map<String, dynamic>))
+          .map((doc) => Sneaker.fromJson(doc.data()))
           .toList();
     }
     return favorites;
   }
 
   Future<bool> isAdmin() async {
-    User? user = _auth.currentUser;
+    final user = _auth.currentUser;
     if (user != null) {
-      DocumentSnapshot docSnapshot =
+      final docSnapshot =
           await _firestore.collection('users').doc(user.uid).get();
-      if (docSnapshot.exists && docSnapshot.data() is Map<String, dynamic>) {
-        Map<String, dynamic> data =
-            docSnapshot.data() as Map<String, dynamic>; // Type cast added here
+      if (docSnapshot.exists && docSnapshot.data() != null) {
+        final data = docSnapshot.data() as Map<String, dynamic>;
         return data['isAdmin'] ?? false;
       }
     }

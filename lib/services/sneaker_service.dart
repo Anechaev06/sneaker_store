@@ -10,10 +10,9 @@ class SneakerService with ChangeNotifier {
 
   Future<List<Sneaker>> getSneakers() async {
     try {
-      QuerySnapshot querySnapshot =
-          await _firestore.collection('sneakers').get();
+      final querySnapshot = await _firestore.collection('sneakers').get();
       return querySnapshot.docs
-          .map((doc) => Sneaker.fromJson(doc.data() as Map<String, dynamic>))
+          .map((doc) => Sneaker.fromJson(doc.data()))
           .toList();
     } catch (e) {
       throw Exception('Error fetching sneakers');
@@ -26,12 +25,12 @@ class SneakerService with ChangeNotifier {
 
   Future<String> uploadImageToFirebase(
       File imageFile, String id, String brand) async {
-    String fileName = basename(imageFile.path);
-    Reference firebaseStorageRef =
+    final fileName = basename(imageFile.path);
+    final firebaseStorageRef =
         FirebaseStorage.instance.ref().child('sneakers/$brand/$id/$fileName');
-    UploadTask uploadTask = firebaseStorageRef.putFile(imageFile);
-    TaskSnapshot taskSnapshot = await uploadTask;
-    String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+    final uploadTask = firebaseStorageRef.putFile(imageFile);
+    final taskSnapshot = await uploadTask;
+    final downloadUrl = await taskSnapshot.ref.getDownloadURL();
     return downloadUrl;
   }
 
@@ -42,9 +41,8 @@ class SneakerService with ChangeNotifier {
   }
 
   Future<void> addSneaker(Sneaker sneaker, List<File> imageFiles) async {
-    List<String> imageUrls =
-        await uploadImages(imageFiles, sneaker.id, sneaker.brand);
-    sneaker = Sneaker(
+    final imageUrls = await uploadImages(imageFiles, sneaker.id, sneaker.brand);
+    final updatedSneaker = Sneaker(
       id: sneaker.id,
       name: sneaker.name,
       price: sneaker.price,
@@ -55,21 +53,20 @@ class SneakerService with ChangeNotifier {
     await _firestore
         .collection('sneakers')
         .doc(sneaker.id)
-        .set(sneaker.toJson());
+        .set(updatedSneaker.toJson());
   }
 
   Future<Sneaker> getSneakerById(String id) async {
-    DocumentSnapshot docSnapshot =
-        await _firestore.collection('sneakers').doc(id).get();
+    final docSnapshot = await _firestore.collection('sneakers').doc(id).get();
     return Sneaker.fromJson(docSnapshot.data() as Map<String, dynamic>);
   }
 
   Future<List<String>> getSneakerImagesByBrand(String brand) async {
-    List<String> imageUrls = [];
-    ListResult listResult =
+    final imageUrls = <String>[];
+    final listResult =
         await FirebaseStorage.instance.ref('sneakers/$brand').listAll();
-    for (Reference ref in listResult.items) {
-      String url = await ref.getDownloadURL();
+    for (final ref in listResult.items) {
+      final url = await ref.getDownloadURL();
       imageUrls.add(url);
     }
     return imageUrls;
@@ -81,12 +78,12 @@ class SneakerService with ChangeNotifier {
 
   Future<List<Sneaker>> getSneakersByBrand(String brand) async {
     try {
-      QuerySnapshot querySnapshot = await _firestore
+      final querySnapshot = await _firestore
           .collection('sneakers')
           .where('brand', isEqualTo: brand)
           .get();
       return querySnapshot.docs
-          .map((doc) => Sneaker.fromJson(doc.data() as Map<String, dynamic>))
+          .map((doc) => Sneaker.fromJson(doc.data()))
           .toList();
     } catch (e) {
       throw Exception('Error fetching sneakers');
@@ -95,13 +92,13 @@ class SneakerService with ChangeNotifier {
 
   Future<List<Sneaker>> getSneakersByName(String name) async {
     try {
-      QuerySnapshot querySnapshot = await _firestore
+      final querySnapshot = await _firestore
           .collection('sneakers')
           .where('name', isGreaterThanOrEqualTo: name)
           .where('name', isLessThan: '${name}z')
           .get();
       return querySnapshot.docs
-          .map((doc) => Sneaker.fromJson(doc.data() as Map<String, dynamic>))
+          .map((doc) => Sneaker.fromJson(doc.data()))
           .toList();
     } catch (e) {
       throw Exception('Error fetching sneakers');
@@ -110,13 +107,12 @@ class SneakerService with ChangeNotifier {
 
   Future<List<String>> getBrands() async {
     try {
-      QuerySnapshot querySnapshot =
-          await _firestore.collection('sneakers').get();
-      var brands = querySnapshot.docs
-          .map((doc) => (doc.data() as Map<String, dynamic>)['brand'] as String)
+      final querySnapshot = await _firestore.collection('sneakers').get();
+      final brands = querySnapshot.docs
+          .map((doc) => (doc.data())['brand'] as String)
           .toSet()
           .toList();
-      brands.sort(); // Optional: to sort alphabetically
+      brands.sort();
       return brands;
     } catch (e) {
       throw Exception('Error fetching brands');
